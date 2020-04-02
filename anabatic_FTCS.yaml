@@ -1,21 +1,21 @@
 timevars:
   dt: 0.5
   tstart: 0.0
-  tend: 60.0
+  tend: 3000.0
 nvars:
   dn: 1.
   nstart: 0.
-  nend: 30.
+  nend: 80.
 constants:
   g: 9.806
   Km: 1.
   Kh: 1.
   theta_0: 300
   theta_surf: 5.
-  gamma: 0.0098
-  beta: 1.
+  gamma: 0.003
+  beta: 25.
 boundaryconds:
-  theta_surf: 7.
+  theta_surf: 2.
   theta_sky: 0.
   u_surf: 0.
   u_sky: 0.
