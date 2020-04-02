@@ -1,0 +1,24 @@
+timevars:
+  dt: 0.1
+  tstart: 0.0
+  tend: 500.0
+nvars:
+  dn: 0.5
+  nstart: 0.
+  nend: 40.
+constants:
+  g: 9.806
+  Km: 1.
+  Kh: 1.
+  theta_0: 300
+  theta_surf: 5.
+  gamma: 0.0098
+  beta: 1.
+boundaryconds:
+  theta_surf: 7.
+  theta_sky: 0.
+  u_surf: 0.
+  u_sky: 0.
+initialconds:
+  initvel: 2.
+  init_th_prof: 0.
