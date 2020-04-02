@@ -13,16 +13,18 @@
 # ---
 
 '''
-Function Library for anabatic_flow_main ver 3
+Function Library for anabatic_flow_main ver 6
 ----------------------------------------
 Author: Andrew Loeppky
-Course: ATSC 409, Apr1/20
+Course: ATSC 409, Apr2/20
 Professor: Susan Allan, Phil Austin
 ''';
 
 '''
 NEW THIS VERSION
 -FTCS diffusion only now works
+
+-FTCS coupled equations work for weak coupling! (small slope angles)
   
 ''';
 
@@ -160,6 +162,8 @@ class Integrator():
         '''
         Calculates t(j+1)th element of (1) and (2) with the forward time centered space method
         
+        **hacky version not mathematically verified!**
+        
         uses convention _old, _new for j and j+1 time elements 
         '''
         #define constants
@@ -181,10 +185,10 @@ class Integrator():
         
         #compute derivatives FTCS
         for n in np.arange(1,len(u_new) -1, 1):
-            u_new[n] = u_old[n] + dt*(theta_old[n]*(N2/gamma)*np.sin((np.pi/180) * beta) + (Km/(dn**2))*(u_old[n+1] - 2*u_old[n] + u_old[n-1]))
-            theta_new[n] = theta_old[n] + dt*(-u_old[n]*gamma*np.sin((np.pi/180) * beta) + (Kh/(dn**2))*(theta_old[n+1] - 2*theta_old[n] + theta_old[n-1]))
-            
-        
+            #FTCS (7.9) -- stable for dt <= dn**2 / 2Km
+            u_new[n] = 2*10**(-2)*theta_old[n] + u_old[n] + (dt*Km/dn**2) * (u_old[n+1] - 2*u_old[n] + u_old[n-1])
+            theta_new[n] = 2*10**(-2)*u_old[n] + theta_old[n] + (dt*Kh/dn**2) * (theta_old[n+1] - 2*theta_old[n] + theta_old[n-1])
+                  
         return u_new, theta_new
  
 
@@ -266,10 +270,10 @@ class Integrator():
             #u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_test(u_old, theta_old)
             
             #Diffusion only, no coupling - can be toggled bw FTCS and DFF (see function)
-            u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_dfsn_only(u_old, u_old2, theta_old, theta_old2)
+            #u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_dfsn_only(u_old, u_old2, theta_old, theta_old2)
             
             #Forward in Time, Centered in Space 
-            #u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_FTCS(u_old, theta_old)
+            u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_FTCS(u_old, theta_old)
             
             #DuFort-Frankel Scheme
             #u_grid[the_time][:], theta_grid[the_time][:] = self.deriv_DFF(u_old, u_old2, theta_old, theta_old2)
