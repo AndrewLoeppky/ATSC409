@@ -305,7 +305,7 @@ class Integrator():
         ax.set_title("the title")
         ax.set_xlabel('time')
         ax.set_ylabel('position')
-        
+        fig.savefig('snapshot.png')
         plt.show(fig)
 
 if __name__ == '__main__':
